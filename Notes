@@ -1,0 +1,110 @@
+Записки по структурирането на проект:
+
+1. Инициализиране на нов проект:
+	- git clone --depth=1 https://github.com/react-boilerplate/react-boilerplate.git VeM_webRTC
+	- npm run setup
+	- npm run clean
+
+	* създава структурата на апликацията, инсталира нужните модули, изчиства примерната апликация
+
+2. Планиране на апликацията
+	- Определяне на нужните контейнери, базирани на страниците в апликацията
+	- Определяне на началното състояние/state на апликацията
+		- разбиване на всеки контейнер поотделно
+		* можем да преизползваме селектори от различни компоненти
+	- Определяне на нужните компоненти за всеки контейнер
+
+3. Генериране на контейнер
+	- npm run generate container name
+		- Y/y на вс. въпроси
+	- Добавяне на Route в App/index.js
+	- Добавяне на началното състояние в reducer-а
+	- Добавяне на селектори към mapStateToProps
+		- създаване на отделен селектор (може да се добавя логика в селектор функцията!) за всяка променливава
+---- изработка на функционалните компоненти
+	- Добавяне на action функции в mapDispatchToProps
+	- Добавяне на асинхронна функция:
+		1. Добавяме 3 константи в containers/component/contants.js
+		2. Добавяме 3 action функции в containers/component/actions.js
+		3. Добавяме 3 case блока в containers/component/reducer.js
+		4. Добавяне на сага в containers/component/saga.js, която да takeLatest() и put() нужните action-и
+		5. Добавяме Функция във mapDispatchToProps
+			- Добавяме функция в mapDispatchToProps, която да изпълнява dispatch() на нужния action, който сме импортнали от containers/component/actions.js
+			- Добавяме функцията във PropTypes
+			- Добавяме функцията във входящите параметри на компонента
+			- Добавяме функцията към параметрите на избрания компонент
+	
+4. Генериране на функционален компонент
+	- npm run generate component name
+	- N/n на всички въпроси
+	- Определяне на PropTypes 
+	- CSS Style компонент темплейт:
+		/**
+		 *
+		 * Label
+		 *
+		 */
+		import styled from 'styled-components';
+
+		const Label = styled.label`
+		  color: #41addd;
+
+		  &:hover {
+		    color: #6cc0e5;
+		  }
+		`;
+
+		export default Label;
+
+
+Пример:
+	1. Планиране на апликацията
+		Контейнери:
+			- LoginPage
+			- CommonRoom
+			- PrivateRoom
+		Функционални Компоненти:
+			- Form
+			- Button
+			- UsersList
+			- UsersListItem
+			- UsersListItemContextMenu
+			- TextArea
+			- MsgBoard
+			- SingleMessage
+			- Call
+			- HangupButton
+
+		Начално Състояние:
+			{
+				logged: false,
+				username: null,
+				usersList: array[],
+			}
+	2. Инициализиране на нов проект
+	3. Създаване на първия контейнер
+		- reducer
+			- задаване на initialState
+		- selector
+			- свързване на компонента с mapStateToProps
+	4. Създаване на функционалните компоненти
+	5. Създаване на всички нужни функции - contants/actions/sagas/reducer cases
+	6. Свързване с mapDispatchToProps
+
+
+	Тестване / Testing:
+
+		Тестване на контейнери
+			https://github.com/react-boilerplate/react-boilerplate/blob/master/docs/testing/unit-testing.md
+
+		Тестване на компоненти
+			https://github.com/react-boilerplate/react-boilerplate/blob/master/docs/testing/component-testing.md
+			1. Да няма грешки в конзолата - автоматично генериран 
+			2. Snapshot тест - трябва само да се махне 'skip', след 'it' за да се активира тестът.
+
+		npm run start:tunnel
+			- пуска сървърът + ngrok и дава url-ът достъпен в интернет!
+		jest --updateSnapshot
+			- обновява всички snapshot-и, за всички ПРОВАЛЯЩИ се тестове
+			- "--testNamePattern" флаг за обновяване на единичен snapshot
+
